@@ -1,0 +1,100 @@
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const botManager = require('./botManager');
+const config = require('../config/config.loader');
+
+class DashboardManager {
+    constructor() {
+        this.dashboardMessage = null;
+    }
+
+    // بدء التحديث التلقائي للوحة التحكم
+    startAutoUpdate(channel) {
+        setInterval(async () => {
+            if (this.dashboardMessage) {
+                await this.updateDashboard(this.dashboardMessage).catch(() => {});
+            }
+        }, 30000); // تحديث كل 30 ثانية
+    }
+
+    // تحديث اللوحة
+    async updateDashboard(message) {
+        try {
+            const embed = new EmbedBuilder()
+                .setTitle('🎛️ لوحة تحكم البوتات')
+                .setDescription('إدارة البوتات والحالات والقنوات الصوتية بسهولة.')
+                .setColor('#2b2d31')
+                .setTimestamp();
+
+            const selectMenu = new ActionRowBuilder().addComponents(
+                new StringSelectMenuBuilder()
+                    .setCustomId('select_bot')
+                    .setPlaceholder('اختر بوت للتحكم به...')
+                    .addOptions(
+                        botManager.getBots().map(b => ({
+                            label: b.name || b.id,
+                            value: String(b.id),
+                            description: `التحكم في ${b.name || b.id}`
+                        }))
+                    )
+            );
+
+            const buttons = new ActionRowBuilder().addComponents(
+                new ButtonBuilder().setCustomId('start_all_bots').setLabel('تشغيل الكل').setStyle(ButtonStyle.Success),
+                new ButtonBuilder().setCustomId('stop_all_bots').setLabel('إيقاف الكل').setStyle(ButtonStyle.Danger),
+                new ButtonBuilder().setCustomId('refresh_dashboard').setLabel('تحديث اللوحة').setStyle(ButtonStyle.Secondary)
+            );
+
+            await message.edit({ embeds: [embed], components: [selectMenu, buttons] });
+        } catch (error) {
+            console.error('❌ خطأ أثناء تحديث لوحة التحكم:', error);
+        }
+    }
+
+    // تفاصيل بوت محدد
+    createBotDetailsEmbed(botId) {
+        const bots = botManager.getBots();
+        const bot = bots.find(b => String(b.id) === String(botId));
+        return new EmbedBuilder()
+            .setTitle(`إعدادات البوت: ${bot?.name || botId}`)
+            .setColor('#5865F2')
+            .addFields(
+                { name: 'الحالة', value: bot?.status || 'online', inline: true },
+                { name: 'النشاط', value: bot?.activityText || 'لا يوجد', inline: true }
+            );
+    }
+
+    // أزرار التحكم بالبوت المختار
+    createBotControlButtons(botId) {
+        return [
+            new ActionRowBuilder().addComponents(
+                new ButtonBuilder().setCustomId(`change_channel_${botId}`).setLabel('تغيير القناة').setStyle(ButtonStyle.Primary),
+                new ButtonBuilder().setCustomId(`change_status_${botId}`).setLabel('تغيير الحالة').setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder().setCustomId(`change_activity_${botId}`).setLabel('تغيير النشاط').setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder().setCustomId(`kick_bot_${botId}`).setLabel('طرد من الصوت').setStyle(ButtonStyle.Warning),
+                new ButtonBuilder().setCustomId(`stop_bot_${botId}`).setLabel('إيقاف البوت').setStyle(ButtonStyle.Danger)
+            )
+        ];
+    }
+
+    // Modals المدخلات
+    getChannelModal(botId) {
+        const modal = new ModalBuilder().setCustomId(`channel_modal_${botId}`).setTitle('تغيير القناة الصوتية');
+        const input = new TextInputBuilder().setCustomId('channel_id').setLabel('معرف القناة الصوتية (ID)').setStyle(TextInputStyle.Short).setRequired(true);
+        return modal.addComponents(new ActionRowBuilder().addComponents(input));
+    }
+
+    getStatusModal(botId) {
+        const modal = new ModalBuilder().setCustomId(`status_modal_${botId}`).setTitle('تغيير حالة البوت');
+        const input = new TextInputBuilder().setCustomId('status').setLabel('الحالة (online/idle/dnd/invisible)').setStyle(TextInputStyle.Short).setRequired(true);
+        return modal.addComponents(new ActionRowBuilder().addComponents(input));
+    }
+
+    getActivityModal(botId) {
+        const modal = new ModalBuilder().setCustomId(`activity_modal_${botId}`).setTitle('تغيير نشاط البوت');
+        const typeInput = new TextInputBuilder().setCustomId('activity_type').setLabel('نوع النشاط (playing/listening...)').setStyle(TextInputStyle.Short).setRequired(true);
+        const textInput = new TextInputBuilder().setCustomId('activity_text').setLabel('نص النشاط').setStyle(TextInputStyle.Short).setRequired(true);
+        return modal.addComponents(new ActionRowBuilder().addComponents(typeInput), new ActionRowBuilder().addComponents(textInput));
+    }
+}
+
+module.exports = new DashboardManager();
