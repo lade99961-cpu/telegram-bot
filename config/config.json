@@ -1,5 +1,5 @@
 {
-  "mainToken": "MTU0MTUwNDMwMDk1MjMyMjA1OA.GGAsTi.JV9zPjcZailtVNTCM5Q7l_bty0HsitDuLe1314",
+  "mainToken": "MTU0MTUwNDMwMDk1MjMyMjA1OA.GEwRoZ.MdComYyOaybipyayHmJCnPxiAXbLENnEW0PIyc",
   "guildId": "1469420881007874070",
   "controlChannelId": "1472221092000301138",
   "language": "ar",
@@ -7,7 +7,7 @@
     {
       "id": "bot1",
       "name": "بوت 1",
-      "token": "MTU0MTUyMjc0NzAxNDc4MzEyOQ.GCB9ia.iPtz1c2OIyYKYgnGI9M4XZvx6JF2v09xKJQ4G4",
+      "token": "",
       "voiceChannelId": "1541504721464983652",
       "status": "online",
       "activityType": "Lao",
