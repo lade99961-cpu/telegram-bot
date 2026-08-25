@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, Collection, REST, Routes, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
-const config = require('./config/config.loader');
+const config = require('./Config/config.loader');
 const lang = require('./lang/lang.loader');
 const botManager = require('./utils/botManager');
 const dashboardManager = require('./utils/dashboardManager');
