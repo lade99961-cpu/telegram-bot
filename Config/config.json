@@ -1,0 +1,39 @@
+{
+  "mainToken": "MTU0MTUwNDMwMDk1MjMyMjA1OA.GdoQYp.0egTl9UQHlTbw7hbaKaA2TmKEBTp1B8dn6DUb4",
+  "guildId": "1469420881007874070",
+  "controlChannelId": "1472221092000301138",
+  "language": "ar",
+  "bots": [
+    {
+      "id": "bot1",
+      "name": "بوت 1",
+      "token": "MTU0MTUyMjc0NzAxNDc4MzEyOQ.Ghywa4.wBg7URRjxKU2sioKPlVNzaPv62EzUuCxa83L3c",
+      "voiceChannelId": "1541504721464983652",
+      "status": "online",
+      "activityType": "Lao",
+      "activityText": "Lao",
+      "enabled": true
+    },
+    {
+      "id": "bot2",
+      "name": "بوت 2",
+      "token": "BOT_2_TOKEN_HERE",
+      "voiceChannelId": "",
+      "status": "idle",
+      "activityType": "listening",
+      "activityText": "الموسيقى",
+      "enabled": true
+    },
+    {
+      "id": "bot3",
+      "name": "بوت 3",
+      "token": "BOT_3_TOKEN_HERE",
+      "voiceChannelId": "",
+      "status": "dnd",
+      "activityType": "watching",
+      "activityText": "السيرفر",
+      "enabled": true
+    }
+  ],
+  "dashboardMessageId": "1541555954640887849"
+}
